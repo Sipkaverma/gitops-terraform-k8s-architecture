@@ -1,0 +1,67 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 5.0"
+    }
+  }
+  required_version = ">= 1.2.0"
+}
+
+provider "aws" {
+  region = "us-east-1"
+}
+
+resource "aws_security_group" "k3s_sg" {
+  name        = "gitops-k3s-sg"
+  description = "Allow SSH, HTTP, HTTPS, and K3s API"
+
+  ingress {
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    from_port   = 6443
+    to_port     = 6443
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+}
+
+resource "aws_instance" "k3s_server" {
+  ami                    = "ami-0c7217cdde317cfec" # Ubuntu 22.04 LTS
+  instance_type          = "t2.micro"
+  vpc_security_group_ids = [aws_security_group.k3s_sg.id]
+
+  user_data = <<-EOF
+              #!/bin/bash
+              curl -sfL https://get.k3s.io | sh -
+              sudo chmod 644 /etc/rancher/k3s/k3s.yaml
+              EOF
+
+  tags = {
+    Name = "GitOps-K3s-Node"
+  }
+}
+
+output "public_ip" {
+  value       = aws_instance.k3s_server.public_ip
+  description = "Public IP of the K3s EC2 instance"
+}
