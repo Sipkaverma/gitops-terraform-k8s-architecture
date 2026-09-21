@@ -1,10 +1,10 @@
-# Enterprise GitOps, Infrastructure-as-Code & Observability Architecture
+# End-to-End GitOps, Infrastructure-as-Code & Observability Architecture
 
 Automated deployment pipeline leveraging **Terraform** for AWS infrastructure provisioning, **K3s** for lightweight Kubernetes orchestration, **ArgoCD** for declarative GitOps continuous delivery, and **Prometheus + Grafana** for cluster observability.
 
 ## Full-Stack Architecture Workflow
 
- 
+ ![diagram](image.png)
 
 ## Project Directory
 * `terraform/`: AWS EC2 & Security Group provisioning with automated K3s bootstrap.
