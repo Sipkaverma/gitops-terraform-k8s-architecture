@@ -1,20 +1,20 @@
 terraform {
+  required_version = ">= 1.5.0"
   required_providers {
     aws = {
       source  = "hashicorp/aws"
       version = "~> 5.0"
     }
   }
-  required_version = ">= 1.2.0"
 }
 
 provider "aws" {
-  region = "us-east-1"
+  region = var.aws_region
 }
 
 resource "aws_security_group" "k3s_sg" {
   name        = "gitops-k3s-sg"
-  description = "Allow SSH, HTTP, HTTPS, and K3s API"
+  description = "Allow SSH, HTTP, K8s API, and Monitoring ports"
 
   ingress {
     from_port   = 22
@@ -24,15 +24,15 @@ resource "aws_security_group" "k3s_sg" {
   }
 
   ingress {
-    from_port   = 80
-    to_port     = 80
+    from_port   = 6443
+    to_port     = 6443
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
 
   ingress {
-    from_port   = 6443
-    to_port     = 6443
+    from_port   = 80
+    to_port     = 80
     protocol    = "tcp"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -46,22 +46,12 @@ resource "aws_security_group" "k3s_sg" {
 }
 
 resource "aws_instance" "k3s_server" {
-  ami                    = "ami-0c7217cdde317cfec" # Ubuntu 22.04 LTS
-  instance_type          = "t2.micro"
+  ami                    = var.ami_id
+  instance_type          = var.instance_type
   vpc_security_group_ids = [aws_security_group.k3s_sg.id]
-
-  user_data = <<-EOF
-              #!/bin/bash
-              curl -sfL https://get.k3s.io | sh -
-              sudo chmod 644 /etc/rancher/k3s/k3s.yaml
-              EOF
+  user_data              = file("${path.module}/scripts/install_k3s.sh")
 
   tags = {
     Name = "GitOps-K3s-Node"
   }
-}
-
-output "public_ip" {
-  value       = aws_instance.k3s_server.public_ip
-  description = "Public IP of the K3s EC2 instance"
 }
