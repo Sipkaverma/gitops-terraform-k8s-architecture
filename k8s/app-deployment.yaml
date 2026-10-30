@@ -17,7 +17,8 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: sipka227/fastapi-app:51e238380d7a2ec7f5ae47d27266f721cae3b44
+        image: sipka227/fastapi-app:latest
+        imagePullPolicy: Never
         ports:
         - containerPort: 80
         env:
@@ -36,9 +37,5 @@ spec:
     targetPort: 80
   selector:
     app: gitops-web-app
-    containers:
-- name: nginx
-  image: sipka227/fastapi-app:latest
-  imagePullPolicy: Never
         imagePullPolicy: Never    # Local image preserve rakhne ke liye
         command: ["/bin/sh", "-c", "while true; do sleep 3600; done"]
