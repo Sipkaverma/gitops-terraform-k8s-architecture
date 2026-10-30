@@ -31,7 +31,7 @@ metadata:
   name: gitops-web-service
   namespace: default
 spec:
-  type: LoadBalancer
+  type: Nodeport
   ports:
   - port: 80
     targetPort: 8000
