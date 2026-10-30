@@ -14,10 +14,10 @@ spec:
     metadata:
       labels:
         app: gitops-web-app
-    spec:
+   spec:
       containers:
-      - name: fastapi-app
-        image: sipka227/fastapi-app:51e238380d07a2ec7f5ae47d27266f721cae3b44
+      - name: fastapi-app  
+        image: sipka227/fastapi-app:51e238380d7a2ec7f5ae47d27266f721cae3b44
         imagePullPolicy: Never
         ports:
         - containerPort: 8000
