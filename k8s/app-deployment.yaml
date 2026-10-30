@@ -17,7 +17,7 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: sipka227/fastapi-app:latest
+        image: sipka227/fastapi-app:51e238380d7a2ec7f5ae47d27266f721cae3b44
         ports:
         - containerPort: 80
         env:
