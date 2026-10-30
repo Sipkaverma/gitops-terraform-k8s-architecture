@@ -1,6 +1,0 @@
-{
-  "name": "DevOps Architecture Workspace",
-  "features": {
-    "ghcr.io/devcontainers/features/terraform:1": {}
-  }
-}
