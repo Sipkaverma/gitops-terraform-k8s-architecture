@@ -36,12 +36,9 @@ spec:
     targetPort: 80
   selector:
     app: gitops-web-app
-    spec:
-  replicas: 1
-  template:
-    spec:
-      containers:
-      - name: fastapi-container   # (Purana container name hi rehne dein)
-        image: sipka227/fastapi-app:latest
+    containers:
+- name: nginx
+  image: sipka227/fastapi-app:latest
+  imagePullPolicy: Never
         imagePullPolicy: Never    # Local image preserve rakhne ke liye
         command: ["/bin/sh", "-c", "while true; do sleep 3600; done"]
