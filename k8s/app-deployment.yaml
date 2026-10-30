@@ -16,11 +16,11 @@ spec:
         app: gitops-web-app
     spec:
       containers:
-      - name: nginx
-        image: sipka227/fastapi-app:latest
+      - name: fastapi-app
+        image: sipka227/fastapi-app:51e238380d07a2ec7f5ae47d27266f721cae3b44
         imagePullPolicy: Never
         ports:
-        - containerPort: 80
+        - containerPort: 8000
         env:
         - name: DATABASE_URL
           value: "postgresql://dummy_user:dummy_pass@localhost:5432/dummy_db"
@@ -34,8 +34,6 @@ spec:
   type: LoadBalancer
   ports:
   - port: 80
-    targetPort: 80
+    targetPort: 8000
   selector:
     app: gitops-web-app
-        imagePullPolicy: Never    # Local image preserve rakhne ke liye
-        command: ["/bin/sh", "-c", "while true; do sleep 3600; done"]
